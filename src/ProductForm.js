@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-const RESET_VALUES = {id: '', category: '', price: '', name: ''}
+const RESET_VALUES = {id: '', category: '', price: '', name: '', inStock: false}
 
 class ProductForm extends Component {
     constructor(props) {
@@ -10,28 +10,16 @@ class ProductForm extends Component {
         this.state = {
             product: Object.assign({}, RESET_VALUES),
             errors: {},
-            checked: true
         }
     }
 
     handleChange(e) {
         const target = e.target
-        const value = target.value
+        const value = target.value;
         const name = target.name
 
         this.setState((prevState) => {
             prevState.product[name] = value
-            return {product: prevState.product}
-        })
-    }
-
-    handleCheckboxChange(e) {
-        const target = e.target
-        const value = target.value
-        const name = target.name
-
-        this.setState((prevState) => {
-            prevState.checked = value
             return {product: prevState.product}
         })
     }
@@ -68,9 +56,10 @@ class ProductForm extends Component {
                 </p>
                 <p>
                     <label>In Stock? <br/>
-                        <input type="checkbox" name="instock" checked={this.state.checked}
-                               onChange={this.handleCheckboxChange}
-                        /> </label>
+                        <select name="inStock" value={this.state.product["inStock"]} onChange={this.handleChange}>
+                            <option value={true}>True</option>
+                            <option value={false}>False</option>
+                        </select></label>
                 </p>
                 <input type="submit" class="btn btn-info" value="Save" onClick={this.handleSave}/>
             </form>

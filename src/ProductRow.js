@@ -1,5 +1,9 @@
 import React, {Component} from 'react'
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 class ProductRow extends Component {
     destroy = () => {
         this.props.onDestroy(this.props.product.productId)
@@ -15,10 +19,10 @@ class ProductRow extends Component {
                 <td>{this.props.product.name}</td>
                 <td>{this.props.product.category}</td>
                 <td>{this.props.product.price}</td>
-                <td>{String(this.props.product.instock)}</td>
+                <td>{capitalizeFirstLetter(String(this.props.product.inStock))}</td>
                 <td className="text-right">
                     <button onClick={this.updateStatus} className="btn btn-info">
-                        Update Status to false
+                        Change In Stock Status
                     </button>
                 </td>
                 <td>

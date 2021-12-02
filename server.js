@@ -26,7 +26,7 @@ const Product = mongoose.model('product', {
     category: String,
     price: Number,
     name: String,
-    instock: Boolean
+    inStock: Boolean
 })
 
 app.get('/product/get/', (req, res) => {
@@ -37,8 +37,8 @@ app.get('/product/get/', (req, res) => {
 })
 
 app.post('/product/create/', (req, res) => {
-    const {id, category, price, name, instock} = req.body
-    let product = new Product({productId: id, category, price, name, instock})
+    const {id, category, price, name, inStock} = req.body
+    let product = new Product({productId: id, category, price, name, inStock})
 
     product.save(err => {
         if (err) {
@@ -58,19 +58,23 @@ app.delete('/product/delete/:productId', (req, res) => {
 })
 
 app.put('/product/update/:productId', (req, res) => {
-    Product.findOneAndUpdate(
-        {productId: req.params.productId},
-        {
-            instock: false
-        },
-        {upsert: false},
-        err => {
-            if (err) console.log('Update Error: ', err)
-            else res.sendStatus(200)
-        }
-    )
+    Product.findOne({productId: req.params.productId}, function (err, result) {
+        if (err) throw err;
+
+        Product.findOneAndUpdate(
+            {productId: req.params.productId},
+            {
+                inStock: !result.inStock
+            },
+            {upsert: false},
+            err => {
+                if (err) console.log('Update Error: ', err)
+                else res.sendStatus(200)
+            }
+        )
+    })
 })
 
-const server = app.listen(3001, () => {
-    console.log('server is listening on port', server.address().port)
+const server = app.listen(3001, "127.0.0.1", () => {
+    console.log('Server started at address:', server.address().address, 'on port:', server.address().port)
 })
